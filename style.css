@@ -1,0 +1,1393 @@
+/* ============================================================
+   COSMIC MONKEY — Visual System 3.2.1
+   ============================================================ */
+
+/* --- Tokens -------------------------------------------------- */
+:root {
+  --bg:           #000000;
+  --text:         #ffffff;
+  --text-dim:     rgba(255,255,255,0.55);
+  --accent:       #a8c4f0;
+  --footer-h:     52px;
+  --ui-z:         100;
+  --space-z:      0;
+  --content-z:    10;
+
+  /* Holographic gradient — matches the wordmark + headline treatment */
+  --holo: linear-gradient(108deg,
+    #b8ceec  0%,
+    #efe2c4 14%,
+    #f0bec8 26%,
+    #d8b4e8 40%,
+    #a8c4f0 53%,
+    #c0d8f8 64%,
+    #b4a8e4 78%,
+    #9494d4 100%
+  );
+
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-logo:    'Nunito', sans-serif;
+  --font-body:    'Space Grotesk', sans-serif;
+}
+
+/* --- Reset --------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+em  { font-style: normal; }
+
+/* ============================================================
+   GRADIENT TEXT UTILITY
+   ============================================================ */
+.gradient-text {
+  background: var(--holo);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* Ensure gradient spans full width so left/right sides differ */
+  background-size: 200% 100%;
+}
+
+/* Inline highlight — same gradient, applied mid-sentence */
+.hl {
+  background: var(--holo);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 300% 100%;
+  background-position: 60% 0;
+}
+
+/* ============================================================
+   TYPOGRAPHY SCALE
+   ============================================================ */
+.headline-xl {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.headline-lg {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.body-copy {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  line-height: 1.65;
+  color: var(--text);
+  max-width: 480px;
+}
+
+.body-copy-sm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(0.82rem, 1.1vw, 0.95rem);
+  line-height: 1.6;
+  color: var(--text-dim);
+  max-width: 340px;
+}
+
+/* ============================================================
+   DIVIDER + CROSSHAIR
+   ============================================================ */
+.divider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 24px;
+}
+
+.crosshair {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.divider-line {
+  display: block;
+  height: 1px;
+  width: 140px;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+
+/* Signal label (top-left of prop sections) */
+.signal-label {
+  position: absolute;
+  top: 10vh;
+  left: 6vw;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ============================================================
+   SPACE ENVIRONMENT (fixed bg layer)
+   ============================================================ */
+#space-env {
+  position: fixed;
+  inset: 0;
+  z-index: var(--space-z);
+  pointer-events: none;
+}
+
+#starfield-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0;
+  animation: nebula-fade-in 3s ease-out forwards;
+}
+
+@keyframes nebula-fade-in {
+  to { opacity: 1; }
+}
+
+.nebula-blue {
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(40, 80, 200, 0.28) 0%, transparent 70%);
+  bottom: -20vw;
+  left: -10vw;
+  animation-delay: 0.3s;
+}
+
+.nebula-purple {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(140, 60, 200, 0.22) 0%, transparent 70%);
+  top: -10vw;
+  right: -5vw;
+  animation-delay: 0.8s;
+}
+
+.nebula-orange {
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, rgba(200, 100, 40, 0.18) 0%, transparent 65%);
+  top: 30vh;
+  right: 10vw;
+  animation-delay: 1.2s;
+}
+
+
+/* ============================================================
+   FIXED UI LAYER
+   ============================================================ */
+#ui-layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ui-z);
+  pointer-events: none;
+}
+
+/* Nav logo — pins top-left, hidden during splash */
+#nav-logo {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  pointer-events: all;
+  opacity: 0; /* fades in via JS after splash */
+  transition: opacity 0.6s ease;
+}
+
+#nav-logo.visible { opacity: 1; }
+
+.nav-logo-img {
+  width: 132px;
+  height: auto;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 8px rgba(160, 130, 255, 0.3));
+}
+
+/* Footer status bar */
+#status-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--footer-h);
+  background: rgba(0, 0, 0, 0.7);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  pointer-events: none;
+}
+
+.bar-left,
+.bar-center,
+.bar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.bar-left  { flex: 1; }
+.bar-center { flex: 0 0 auto; }
+.bar-right { flex: 1; justify-content: flex-end; }
+
+/* All bar text — tiny, monospaced feel via Space Grotesk */
+#status-bar span {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+  white-space: nowrap;
+}
+
+.bar-tag     { color: rgba(255,255,255,0.55); }
+.bar-pip     { color: rgba(255,255,255,0.3); }
+.bar-system  { color: rgba(255,255,255,0.28); }
+.bar-accent-text { color: rgba(255,255,255,0.6); }
+.bar-plus    { color: rgba(255,255,255,0.45); font-size: 0.75rem; }
+.bar-slogan  { color: rgba(255,255,255,0.32); }
+
+/* ============================================================
+   SCROLL ROOT + WAYPOINT SECTIONS
+   ============================================================ */
+#scroll-root {
+  position: relative;
+  z-index: var(--content-z);
+}
+
+/* Each section is 110vh — tighter pacing, still enough room for
+   the approach/hold/exit animation to breathe */
+.waypoint {
+  position: relative;
+  height: 110vh;
+}
+
+
+/* The .scene is sticky — it stays at the top while parent scrolls */
+.scene {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  /* Reserve footer space */
+  padding-bottom: var(--footer-h);
+  /* Initial flythrough state — GSAP overrides per section */
+  will-change: transform, opacity, filter;
+}
+
+/* ============================================================
+   SECTION 1 — SPLASH
+   ============================================================ */
+.splash-scene {
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Dust particle canvas fills the splash scene */
+#dust-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Logo container — centered, sits above dust canvas */
+.splash-logo-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(720px, 82vw);
+}
+
+/* Transparent PNG — animates in via JS (GSAP), no CSS animation
+   so no stacking-context isolation issue with blend modes */
+.splash-logo {
+  width: 100%;
+  height: auto;
+  opacity: 0;           /* GSAP drives opacity to 1 */
+  filter: drop-shadow(0 0 85px rgba(160, 130, 255, 0.85))
+          drop-shadow(0 0 170px rgba(180, 150, 255, 0.37));
+}
+
+/* Scroll hint — centered bottom */
+.scroll-hint {
+  position: absolute;
+  bottom: calc(var(--footer-h) + 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+  animation: hint-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+  50%       { opacity: 0.9; transform: translateX(-50%) translateY(6px); }
+}
+
+.scroll-hint-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.scroll-hint-line {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+}
+
+/* ============================================================
+   SECTION 2 — WHAT'S A COSMIC MONKEY
+   ============================================================ */
+.whats-scene {
+  padding: 0 6vw 0 10vw;
+  gap: 5vw;
+  align-items: center;
+}
+
+.whats-content {
+  flex: 0 0 auto;
+  max-width: 520px;
+}
+
+/* BTS video placeholder — fills the right column top-to-bottom */
+.whats-video-wrap {
+  flex: 1 1 auto;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  padding: 14vh 6vw 14vh 8vw;
+  position: relative;
+}
+
+.whats-video {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: block;
+  background: #07071a;
+  border-radius: 10px;
+  border: none;
+  box-shadow:
+    0 0 60px rgba(100, 80, 220, 0.22);
+}
+
+/* Hidden now that video is live */
+.whats-video-wrap::before {
+  content: '';
+  position: absolute;
+  top: 6vh;
+  left: 0;
+  right: 6vw;
+  bottom: calc(6vh + 32px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(180, 160, 255, 0.25);
+  pointer-events: none;
+  border-radius: 10px;
+}
+
+.whats-video-label {
+  flex: 0 0 auto;
+  margin-top: 12px;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: rgba(180, 160, 255, 0.45);
+  text-align: center;
+}
+
+/* ============================================================
+   BRANDS INTERSTITIAL — compact static grid between sections
+   ============================================================ */
+#brands-worked {
+  position: relative;
+  z-index: var(--content-z);
+}
+
+.brands-interstitial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.5vh;
+  padding: 5vh 8vw;
+}
+
+.brands-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 860px;
+}
+
+/* Lines stretch equally on both sides of the eyebrow text */
+.brands-label .divider-line {
+  flex: 1;
+  width: auto;
+}
+
+.brands-eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.16rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: var(--holo);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 200% 100%;
+}
+
+.brands-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3.5vh 5vw;
+  max-width: 80vw;
+}
+
+.brand-logo {
+  /* Fixed container — every logo fits within this box, no exceptions */
+  width: 170px;
+  height: 75px;
+  object-fit: contain;
+  object-position: center;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+  opacity: 0.38;
+  transition: opacity 0.3s ease;
+  display: block;
+}
+
+.brand-logo:hover {
+  opacity: 0.85;
+}
+
+/* White/opaque-background logos: invert so the white bg becomes black
+   (invisible on the dark site) and the logo shape becomes light */
+.brand-logo--opaque {
+  filter: invert(1) grayscale(1) brightness(1.6);
+}
+
+.brand-logo--opaque:hover {
+  opacity: 0.9;
+}
+
+
+/* -------------------------------------------------------
+   CREATIVE + PRODUCTION SCENE
+   ------------------------------------------------------- */
+.creative-scene {
+  justify-content: center;
+  align-items: center;
+  padding: 0 7vw;
+  gap: 5vw;
+}
+
+/* Vertical video — left column */
+.creative-video-wrap {
+  flex: 0 0 auto;
+  width: 22vw;
+  align-self: center;
+}
+
+.creative-video {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  display: block;
+  background: #07071a;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 0 60px rgba(100, 80, 220, 0.22);
+}
+
+.creative-content {
+  flex: 0 0 auto;
+  width: 42vw;
+  text-align: left;
+}
+
+.creative-content .divider-row {
+  justify-content: flex-start;
+}
+
+.creative-content .headline-xl {
+  font-size: clamp(1rem, 3vw, 3.8rem);
+}
+
+.creative-content .body-copy {
+  text-align: left;
+  margin: 0;
+}
+
+.creative-content .body-copy + .body-copy {
+  margin-top: 1.6em;
+}
+
+/* Decorative planet — right side */
+.whats-orb {
+  position: absolute;
+  right: 8vw;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 260px;
+  height: 260px;
+  pointer-events: none;
+}
+
+.orb-body {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%,
+    rgba(80, 60, 160, 0.9) 0%,
+    rgba(30, 20, 80, 0.95) 55%,
+    rgba(10, 10, 30, 1) 100%
+  );
+  box-shadow:
+    0 0 60px rgba(100, 80, 220, 0.5),
+    0 0 120px rgba(100, 80, 220, 0.2),
+    inset 0 0 40px rgba(200, 160, 255, 0.15);
+  position: absolute;
+  top: 30px;
+  left: 30px;
+}
+
+.orb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(180, 140, 255, 0.3);
+  transform: rotateX(72deg) rotateZ(20deg);
+  box-shadow: 0 0 24px rgba(180, 140, 255, 0.2);
+}
+
+.orb-glow {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(100, 60, 200, 0.15) 0%,
+    transparent 70%
+  );
+}
+
+/* ============================================================
+   SECTION 3 — ABOUT US / BIOS
+   ============================================================ */
+.about-scene {
+  align-items: flex-start;
+  padding: 0;
+}
+
+.about-headline {
+  position: absolute;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Bio cards container covers full scene for absolute positioning */
+.bio-cards {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Shared bio card style */
+.bio-card {
+  position: absolute;
+  width: 360px;
+}
+
+/* Each card has its own named animation so it can carry its
+   base centering transform AND float independently */
+.bio-card { animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+
+/* Inner wrapper — scales independently of the animation transform on .bio-card */
+.bio-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  transform-origin: center top;
+  transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.bio-card:hover .bio-card-inner {
+  transform: scale(1.22);
+}
+
+/* Colin — left third, slow deep float */
+.bio-colin {
+  left: 17%;
+  top: 65%;
+  width: 400px;
+  animation: float-colin 7.5s ease-in-out infinite;
+}
+@keyframes float-colin {
+  0%   { transform: translate(-50%, -50%); }
+  28%  { transform: translate(calc(-50% + 7px), calc(-50% - 26px)); }
+  58%  { transform: translate(calc(-50% - 5px), calc(-50% - 11px)); }
+  100% { transform: translate(-50%, -50%); }
+}
+
+/* Ori — center third, elevated, medium float */
+.bio-ori {
+  left: 50%;
+  top: 52%;
+  width: 340px;
+  animation: float-ori 8.8s ease-in-out infinite;
+  animation-delay: -3.2s;
+}
+@keyframes float-ori {
+  0%   { transform: translate(-50%, -50%); }
+  32%  { transform: translate(calc(-50% + 10px), calc(-50% - 28px)); }
+  62%  { transform: translate(calc(-50% - 6px), calc(-50% - 14px)); }
+  100% { transform: translate(-50%, -50%); }
+}
+
+/* Joe — right third, quick float */
+.bio-joe {
+  left: 83%;
+  top: 65%;
+  width: 310px;
+  animation: float-joe 6.2s ease-in-out infinite;
+  animation-delay: -1.8s;
+}
+@keyframes float-joe {
+  0%   { transform: translate(-50%, -50%); }
+  38%  { transform: translate(calc(-50% - 8px), calc(-50% - 22px)); }
+  68%  { transform: translate(calc(-50% + 6px), calc(-50% - 6px)); }
+  100% { transform: translate(-50%, -50%); }
+}
+
+/* Photo circle with holographic gradient border */
+.bio-photo-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.bio-photo-placeholder {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background:
+    linear-gradient(#0a0a1c, #0a0a1c) padding-box,
+    var(--holo) border-box;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle inner nebula glow — sits above placeholder, below real photo */
+.bio-photo-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 40% 35%,
+    rgba(100, 80, 200, 0.25) 0%,
+    transparent 65%
+  );
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.photo-tk {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+/* Scale down photo circles for smaller cards */
+.bio-ori .bio-photo-placeholder  { width: 260px; height: 260px; }
+.bio-joe .bio-photo-placeholder  { width: 230px; height: 230px; }
+
+.bio-info {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bio-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background-size: 300% 100%;
+}
+
+.bio-title {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+.bio-body {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: rgba(220, 215, 255, 0.82);
+  line-height: 1.6;
+  max-width: 320px;
+  text-align: center;
+  /* Hidden until hover — slides in below the name/title */
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    max-height 0.6s ease,
+    opacity    0.4s ease 0.12s,
+    transform  0.4s ease 0.12s;
+}
+
+.bio-card:hover .bio-body {
+  max-height: 420px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Real headshot — grayscale until hover */
+.bio-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 50%;
+  display: block;
+  filter: grayscale(100%);
+  transition: filter 0.55s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.bio-card:hover .bio-photo {
+  filter: grayscale(0%);
+}
+
+/* Pause float + bring card to front on hover */
+.bio-card:hover {
+  animation-play-state: paused;
+  z-index: 20;
+  cursor: default;
+}
+
+/* About scene allows bio to extend below card boundary */
+#about .scene {
+  overflow: visible;
+}
+
+/* Faint star-crosshair accents scattered around bios section */
+.about-scene::before,
+.about-scene::after {
+  content: '+';
+  position: absolute;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.12);
+  pointer-events: none;
+}
+.about-scene::before { top: 22%; left: 32%; }
+.about-scene::after  { bottom: 20%; right: 28%; }
+
+/* ============================================================
+   SECTIONS 4–6 — PROP SCENES (TV / COMPUTER / PHONE)
+   Shared layout: signal label + left text + right prop
+   ============================================================ */
+.prop-scene {
+  padding: 0 6vw;
+  position: relative;
+}
+
+.prop-layout {
+  display: flex;
+  align-items: center;
+  gap: 4vw;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.prop-text {
+  flex: 0 0 auto;
+  width: min(400px, 38vw);
+  display: flex;
+  flex-direction: column;
+}
+
+.prop-visual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* Prop asset images — the TV/computer PNGs include their own
+   dark-space backgrounds, so they sit naturally on the scene */
+.prop-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.prop-img {
+  max-height: 70vh;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 40px rgba(100, 80, 220, 0.3));
+}
+
+.tv-prop      { max-width: 640px; }
+.computer-prop { max-width: 700px; }
+
+/* Phone section — flip layout: phone right, text left
+   but phone is portrait so we constrain height more */
+.prop-layout--phone .prop-visual { order: 2; }
+.prop-layout--phone .prop-text   { order: 1; }
+.prop-stage--phone { max-width: 280px; }
+.phone-prop        { max-height: 65vh; }
+
+/* Copy blocks (used in branded + vertical) */
+.copy-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 4px;
+}
+
+.copy-block-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+/* ============================================================
+   STAR / CROSSHAIR ACCENT GLYPHS (decorative)
+   ============================================================ */
+
+/* Thin horizontal rule beneath each prop section headline */
+.prop-scene .divider-line { width: 100px; }
+
+/* ============================================================
+   SCROLL ANIMATION INITIAL STATES
+   GSAP will animate from these to their "arrived" states.
+   Splash starts visible; all others start distant/invisible.
+   ============================================================ */
+#splash .scene   { opacity: 1; transform: scale(1); filter: none; }
+
+#whats .scene,
+#about .scene,
+#tv-film .scene,
+#branded .scene,
+#vertical .scene,
+#contact .scene {
+  opacity: 0;
+  transform: scale(0.62);
+  filter: blur(8px);
+  transform-origin: center center;
+}
+
+/* ============================================================
+   SECTION 6 — VERTICAL (Floating CSS Phone, 9:16)
+   Mirrors TV & Film / Branded layout: signal label above headline,
+   text at 18vw left, portrait phone floating right.
+   ============================================================ */
+.vertical-scene {
+  padding: 0 8vw;
+  justify-content: center;
+  align-items: center;
+  gap: 7vw;
+}
+
+.vertical-float {
+  flex: 0 0 auto;
+  order: 2;
+  animation: phone-float 9s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+@keyframes phone-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-14px); }
+}
+
+/* Phone outer shell — portrait, heavily rounded */
+.phone-chassis {
+  position: relative;
+  width: min(27vw, 390px);
+  background: #12121e;
+  border: 10px solid #1c1c2e;
+  border-radius: 36px;
+  padding: 14px 8px;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 0 1px #0e0e1c;
+  filter:
+    drop-shadow(0 0  85px rgba(120, 100, 255, 0.71))
+    drop-shadow(0 0 204px rgba(100,  80, 220, 0.27));
+}
+
+/* Punch-hole camera dot */
+.phone-chassis::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #0a0a18;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.06);
+  z-index: 2;
+}
+
+/* Screen — 9:16 */
+.phone-screen-area {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background: #05050f;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
+}
+
+.vertical-screen-tk {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.52rem;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+  writing-mode: vertical-rl;  /* orient the label vertically */
+}
+
+.vertical-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Text block — same positioning as TV & Film / Branded */
+.vertical-text {
+  flex: 0 0 auto;
+  order: 1;
+  width: min(340px, 26vw);
+  z-index: 2;
+}
+
+/* Signal label — inline above headline, decorative */
+.vertical-signal {
+  position: relative;
+  top: auto;
+  left: auto;
+  margin-bottom: 14px;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   SECTION 5 — BRANDED CONTENT (Floating CSS Laptop)
+   Mirrors the TV & Film layout: signal label above headline,
+   text at 18vw left, CSS prop floating on the right.
+   ============================================================ */
+.branded-scene {
+  padding: 0 6vw;
+  align-items: center;
+}
+
+.branded-float {
+  position: absolute;
+  right: 7vw;
+  top: 50%;
+  animation: tv-float 8s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+@keyframes laptop-float {
+  0%, 100% { transform: translateY(-50%); }
+  50%       { transform: translateY(calc(-50% - 14px)); }
+}
+
+/* Chassis is now a sized wrapper around the PNG */
+.laptop-chassis {
+  position: relative;
+  width: min(60vw, 1080px);
+  filter:
+    drop-shadow(0 0  85px rgba(120, 100, 255, 0.68))
+    drop-shadow(0 0 204px rgba(100,  80, 220, 0.27));
+}
+
+.laptop-frame-img {
+  width: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Video overlay — calibrated to laptop_frame_16x9.png screen area.
+   Nudge top/left/width if needed after visual check. */
+.laptop-screen-area {
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 70%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.branded-screen-tk {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+.branded-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  object-fit: cover;
+}
+
+/* Text block — same positioning as TV & Film */
+.branded-text {
+  position: absolute;
+  left: 18vw;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(340px, 26vw);
+  z-index: 2;
+}
+
+/* Signal label — inline above headline, decorative weight */
+.branded-signal {
+  position: relative;
+  top: auto;
+  left: auto;
+  margin-bottom: 14px;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   SECTION 4 — TV / FILM (Floating CSS TV)
+   Pure CSS bezel + screen; starfield is the background.
+   Drop reel.mp4 into <source> when ready.
+   ============================================================ */
+.tvfilm-scene {
+  padding: 0 6vw;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Floating wrapper — right half of the scene, gentle vertical drift */
+.tvfilm-float {
+  position: absolute;
+  right: 3vw;
+  top: 50%;
+  animation: tv-float 7s ease-in-out infinite;
+}
+
+@keyframes tv-float {
+  0%, 100% { transform: translateY(-50%); }
+  50%       { transform: translateY(calc(-50% - 18px)); }
+}
+
+/* Outer chassis — the dark TV body */
+/* Chassis is now just a sized, positioned wrapper around the PNG */
+.tv-chassis {
+  position: relative;
+  width: min(58vw, 1080px);
+  filter:
+    drop-shadow(0 0  85px rgba(120, 100, 255, 0.77))
+    drop-shadow(0 0 204px rgba(100,  80, 220, 0.31));
+}
+
+.tv-frame-img {
+  width: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Video overlay — 16:9 box calibrated to tv_frame_16x9.png bezel.
+   Width sets size; aspect-ratio locks 16:9. Nudge top/left/width if still off. */
+.tv-screen-area {
+  position: absolute;
+  top: 4%;
+  left: 3.3%;
+  width: 93.4%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Placeholder label */
+.tvfilm-screen-tk {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+.tvfilm-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Text block — cleared right of the nav logo watermark */
+.tvfilm-text {
+  position: absolute;
+  left: 18vw;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(340px, 26vw);
+  z-index: 2;
+}
+
+.tvfilm-text .headline-lg {
+  font-size: clamp(1.8rem, 4.2vw, 4.5rem);
+}
+
+/* Signal label inside the text block — flows above the headline,
+   reset from the absolute positioning used in other prop sections */
+.tvfilm-signal {
+  position: relative;
+  top: auto;
+  left: auto;
+  margin-bottom: 14px;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   SECTION 7 — CONTACT
+   ============================================================ */
+.contact-scene {
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.contact-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+
+.contact-signal {
+  position: relative;
+  top: auto;
+  left: auto;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.contact-email {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 3.5vw, 3.2rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--holo);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 200% 100%;
+  text-decoration: none;
+  margin-top: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.contact-email:hover {
+  opacity: 0.75;
+}
+
+.contact-socials {
+  margin-top: 3.5vh;
+  display: flex;
+  gap: 2.5vw;
+}
+
+.contact-social-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  opacity: 0.55;
+  transition: opacity 0.3s ease;
+}
+
+.contact-social-link:hover {
+  opacity: 1;
+}
+
+.contact-social-icon {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
+  display: block;
+}
+
+.contact-social-handle {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE ADJUSTMENTS
+   ============================================================ */
+@media (max-width: 768px) {
+  .prop-layout {
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .prop-text { width: 100%; max-width: 100%; }
+  .prop-layout--phone .prop-visual,
+  .prop-layout--phone .prop-text { order: unset; }
+
+  .whats-orb { display: none; }
+
+  .bio-card { width: 140px; }
+  .bio-colin { left: 5%; }
+  .bio-ori   { left: 38%; }
+
+  .splash-word { font-size: clamp(3.8rem, 18vw, 7rem); }
+
+  .bar-system,
+  .bar-accent-text { display: none; }
+}

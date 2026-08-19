@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmic Monkey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #04040f;
+      color: #e0dff5;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* ── Space environment ── */
+    #space-env {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #starfield-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+    }
+
+    .nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+    .nebula-blue   { width: 55vw; height: 55vw; background: radial-gradient(circle, #2a5aff 0%, transparent 70%); top: -18%; left: -10%; }
+    .nebula-purple { width: 45vw; height: 45vw; background: radial-gradient(circle, #7c3aed 0%, transparent 70%); top: 30%;  right: -8%; }
+    .nebula-orange { width: 35vw; height: 35vw; background: radial-gradient(circle, #c2400a 0%, transparent 70%); bottom: -10%; left: 25%; }
+
+    /* ── Splash scene ── */
+    #splash {
+      position: relative;
+      z-index: 1;
+      width: 100vw; height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #dust-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    .splash-logo-wrap {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .splash-logo {
+      width: clamp(200px, 28vw, 480px);
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 40px rgba(180, 160, 255, 0.3));
+    }
+
+    /* ── Scroll hint ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+      animation: hint-fade 3s ease-in-out 2s both;
+    }
+
+    .scroll-hint-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      color: rgba(220, 215, 255, 0.35);
+      text-transform: uppercase;
+    }
+
+    .scroll-hint-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, rgba(180,160,255,0.5), transparent);
+      animation: line-pulse 2s ease-in-out infinite 2s;
+    }
+
+    @keyframes hint-fade {
+      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    @keyframes line-pulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 1; }
+    }
+
+    /* ── Footer status bar ── */
+    #status-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(4, 4, 20, 0.7);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      color: rgba(180, 170, 220, 0.45);
+    }
+
+    .bar-left, .bar-right { display: flex; align-items: center; gap: 12px; }
+    .bar-center { position: absolute; left: 50%; transform: translateX(-50%); }
+
+    .bar-tag   { color: rgba(180,170,220,0.7); font-weight: 600; }
+    .bar-pip   { width: 18px; height: 18px; border: 1px solid rgba(180,170,220,0.2); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; }
+    .bar-accent-text { color: rgba(200,190,255,0.55); letter-spacing: 0.22em; }
+    .bar-plus  { color: rgba(180,170,220,0.5); }
+  </style>
+</head>
+<body>
+
+  <!-- Space background -->
+  <div id="space-env" aria-hidden="true">
+    <canvas id="starfield-canvas"></canvas>
+    <div class="nebula nebula-blue"></div>
+    <div class="nebula nebula-purple"></div>
+    <div class="nebula nebula-orange"></div>
+  </div>
+
+  <!-- Splash -->
+  <section id="splash">
+    <canvas id="dust-canvas" aria-hidden="true"></canvas>
+    <div class="splash-logo-wrap">
+      <img
+        src="assets/images/logo-transparent.png"
+        alt="Cosmic Monkey"
+        class="splash-logo"
+        id="splash-logo"
+      >
+    </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <span class="scroll-hint-label">SCROLL</span>
+      <div class="scroll-hint-line"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="status-bar">
+    <div class="bar-left">
+      <span class="bar-tag">CM//26</span>
+      <span class="bar-pip">IN</span>
+      <span class="bar-pip">V</span>
+      <span class="bar-system">COSMIC MONKEY VISUALS SYSTEM 3.2.1</span>
+    </div>
+    <div class="bar-center">
+      <span class="bar-accent-text">UNFETTERED TIME</span>
+    </div>
+    <div class="bar-right">
+      <span class="bar-plus">+</span>
+      <span class="bar-slogan">STAY CURIOUS.</span>
+      <span class="bar-slogan">STAY PLAYFUL.</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    /* ── Starfield ── */
+    (function () {
+      const canvas = document.getElementById('starfield-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H;
+
+      function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const LAYERS = [
+        { count: 220, r: 0.7,  opacity: 0.50 },
+        { count: 110, r: 1.1,  opacity: 0.72 },
+        { count:  55, r: 1.7,  opacity: 0.95 },
+      ];
+
+      const stars = LAYERS.flatMap(l =>
+        Array.from({ length: l.count }, () => ({
+          x: Math.random(),
+          y: Math.random(),
+          r: l.r + Math.random() * 0.5,
+          o: l.opacity * (0.6 + Math.random() * 0.4),
+          tw: Math.random() * Math.PI * 2,
+        }))
+      );
+
+      const sparkles = Array.from({ length: 8 }, () => ({
+        x: Math.random(), y: Math.random(), phase: Math.random() * Math.PI * 2,
+      }));
+
+      function draw(ts) {
+        ctx.clearRect(0, 0, W, H);
+        for (const s of stars) {
+          const t = 0.8 + 0.2 * Math.sin(ts * 0.0012 + s.tw);
+          ctx.beginPath();
+          ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${(s.o * t).toFixed(3)})`;
+          ctx.fill();
+        }
+        for (const sp of sparkles) {
+          const intensity = 0.5 + 0.5 * Math.sin(ts * 0.0008 + sp.phase);
+          if (intensity < 0.6) continue;
+          const x = sp.x * W, y = sp.y * H, size = 2.5 * intensity;
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.strokeStyle = `rgba(200,210,255,${(intensity * 0.9).toFixed(2)})`;
+          ctx.lineWidth = 0.5;
+          for (let a = 0; a < 4; a++) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(Math.cos(a * Math.PI / 2) * size, Math.sin(a * Math.PI / 2) * size);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    })();
+
+    /* ── Space dust + logo entrance ── */
+    (function () {
+      const dc   = document.getElementById('dust-canvas');
+      const dctx = dc.getContext('2d');
+      let DW, DH, cx, cy;
+
+      function resize() {
+        DW = dc.width  = dc.offsetWidth;
+        DH = dc.height = dc.offsetHeight;
+        cx = DW / 2; cy = DH / 2;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const COLORS = [
+        [180,200,240],[220,180,240],[240,190,210],
+        [240,230,200],[160,200,240],[200,160,255],
+      ];
+
+      const DUST = Array.from({ length: 260 }, (_, i) => {
+        const isFine = i < 200;
+        const col = COLORS[Math.floor(Math.random() * COLORS.length)];
+        return {
+          angle:  Math.random() * Math.PI * 2,
+          radius: Math.pow(Math.random(), 1.6) * (isFine ? 0.38 : 0.22),
+          speed:  (Math.random() * 0.0002 + 0.00005) * (Math.random() < 0.5 ? 1 : -1),
+          drift:  (Math.random() - 0.5) * 0.00008,
+          size:   isFine ? 0.6 + Math.random() * 1.2 : 3 + Math.random() * 7,
+          opacity: isFine ? 0.25 + Math.random() * 0.55 : 0.04 + Math.random() * 0.12,
+          col,
+          twinkle: Math.random() * Math.PI * 2,
+          twinkleSpeed: 0.0008 + Math.random() * 0.0015,
+          isFine,
+        };
+      });
+
+      let startTime = null;
+      const FADE = 3200;
+
+      function drawDust(ts) {
+        if (!startTime) startTime = ts;
+        const globalOp = Math.min(1, (ts - startTime) / FADE);
+        dctx.clearRect(0, 0, DW, DH);
+        const refR = Math.min(DW, DH) * 0.5;
+
+        for (const p of DUST) {
+          p.angle  += p.speed;
+          p.radius += p.drift;
+          if (p.radius > (p.isFine ? 0.44 : 0.30)) p.drift *= -1;
+          if (p.radius < 0.01) p.drift = Math.abs(p.drift);
+
+          const x  = cx + Math.cos(p.angle) * p.radius * refR;
+          const y  = cy + Math.sin(p.angle) * p.radius * refR * 0.55;
+          const tw = 0.75 + 0.25 * Math.sin(ts * p.twinkleSpeed + p.twinkle);
+          const op = p.opacity * tw * globalOp;
+          const [r, g, b] = p.col;
+
+          if (p.isFine) {
+            dctx.beginPath();
+            dctx.arc(x, y, p.size, 0, Math.PI * 2);
+            dctx.fillStyle = `rgba(${r},${g},${b},${op.toFixed(3)})`;
+            dctx.fill();
+          } else {
+            const grd = dctx.createRadialGradient(x, y, 0, x, y, p.size);
+            grd.addColorStop(0, `rgba(${r},${g},${b},${op.toFixed(3)})`);
+            grd.addColorStop(1, `rgba(${r},${g},${b},0)`);
+            dctx.beginPath();
+            dctx.arc(x, y, p.size, 0, Math.PI * 2);
+            dctx.fillStyle = grd;
+            dctx.fill();
+          }
+        }
+        requestAnimationFrame(drawDust);
+      }
+      requestAnimationFrame(drawDust);
+
+      /* Logo entrance */
+      const logo = document.getElementById('splash-logo');
+      if (logo && window.gsap) {
+        gsap.set(logo, { y: 28, scale: 0.5, opacity: 0 });
+        gsap.to(logo, { opacity: 1, y: 0, scale: 1, duration: 2.8, ease: 'power3.out', delay: 0.7 });
+      }
+    })();
+  </script>
+</body>
+</html>

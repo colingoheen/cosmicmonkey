@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmic Monkey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Nunito:wght@800;900&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       FIXED UI LAYER — logo + footer bar, never participates in flythrough
+       ============================================================ -->
+  <div id="ui-layer">
+
+    <!-- Nav logo — hidden on splash, fades in after first scroll -->
+    <div id="nav-logo" aria-label="Cosmic Monkey home">
+      <img src="assets/images/logo-transparent.png" alt="Cosmic Monkey" class="nav-logo-img">
+    </div>
+
+    <!-- Persistent footer status bar -->
+    <footer id="status-bar">
+      <div class="bar-left">
+        <span class="bar-tag">CM//26</span>
+        <span class="bar-pip">IN</span>
+        <span class="bar-pip">V</span>
+        <span class="bar-system">COSMIC MONKEY VISUALS SYSTEM 3.2.1</span>
+      </div>
+      <div class="bar-center">
+        <span class="bar-accent-text">UNFETTERED TIME</span>
+      </div>
+      <div class="bar-right">
+        <span class="bar-plus">+</span>
+        <span class="bar-slogan">STAY CURIOUS.</span>
+        <span class="bar-slogan">STAY PLAYFUL.</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ============================================================
+       SPACE ENVIRONMENT — fixed behind everything, parallaxes
+       ============================================================ -->
+  <div id="space-env" aria-hidden="true">
+    <canvas id="starfield-canvas"></canvas>
+    <div class="nebula nebula-blue"></div>
+    <div class="nebula nebula-purple"></div>
+    <div class="nebula nebula-orange"></div>
+  </div>
+
+  <!-- ============================================================
+       SCROLL ROOT — 6 waypoint sections, each 150vh
+       .scene inside each is position:sticky so it holds while
+       the animation plays across the full section height
+       ============================================================ -->
+  <main id="scroll-root">
+
+    <!-- ——————————————————————————————————————
+         SECTION 1 · SPLASH
+         —————————————————————————————————————— -->
+    <section id="splash" class="waypoint" data-waypoint="splash">
+      <div class="scene splash-scene">
+
+        <!-- Space dust particle canvas — centered on logo -->
+        <canvas id="dust-canvas" aria-hidden="true"></canvas>
+
+        <!-- Logo fades up from darkness — transparent PNG, no blend tricks needed -->
+        <div class="splash-logo-wrap">
+          <img
+            src="assets/images/logo-transparent.png"
+            alt="Cosmic Monkey"
+            class="splash-logo"
+          >
+        </div>
+
+        <!-- Scroll hint -->
+        <div class="scroll-hint" aria-hidden="true">
+          <span class="scroll-hint-label">SCROLL</span>
+          <div class="scroll-hint-line"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ——————————————————————————————————————
+         SECTION 2 · WHAT'S A COSMIC MONKEY
+         —————————————————————————————————————— -->
+    <section id="whats" class="waypoint" data-waypoint="whats">
+      <div class="scene whats-scene">
+
+        <div class="whats-content">
+          <h1 class="headline-xl gradient-text">WHAT'S A<br>COSMIC MONKEY?</h1>
+          <div class="divider-row">
+            <span class="crosshair">+</span>
+            <span class="divider-line"></span>
+          </div>
+          <p class="body-copy">
+            Cosmic Monkey is an award-winning production company that works alongside top-tier talent to develop and produce unscripted series, films, and branded content that has been featured by a wide range of distributors including, <span class="hl">Hearst Television, Tastemade, Tubi, Roku, YoutubeTV and Netflix</span>. Our team's credits span formats and genres, from talent-driven food series to competition, travel and lifestyle shows, as well as docu-series. Cosmic Monkey was founded by a group of <span class="hl">veteran media producers and executives</span> with a focus on producing scalable production models with proven success, creating premium content at all budget levels.
+          </p>
+        </div>
+
+        <!-- BTS video montage -->
+        <div class="whats-video-wrap">
+          <iframe
+            class="whats-video"
+            src="https://player.vimeo.com/video/1219617878?h=a52c86af67&autoplay=1&loop=1&muted=1&background=1&title=0&byline=0&portrait=0"
+            allow="autoplay; fullscreen"
+            allowfullscreen
+            frameborder="0"
+          ></iframe>
+          <div class="whats-video-label">
+            <span class="crosshair">+</span> BEHIND THE SCENES
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ——————————————————————————————————————
+         BRANDS INTERSTITIAL (no sticky/flythrough — compact strip)
+         —————————————————————————————————————— -->
+    <section id="brands-worked">
+      <div class="brands-interstitial">
+        <div class="brands-label">
+          <span class="divider-line"></span>
+          <span class="crosshair">+</span>
+          <span class="brands-eyebrow">BRANDS WE'VE WORKED WITH</span>
+          <span class="crosshair">+</span>
+          <span class="divider-line"></span>
+        </div>
+        <div class="brands-grid">
+          <!-- Transparent-bg logos -->
+          <img src="https://cdn.simpleicons.org/netflix" alt="Netflix" class="brand-logo">
+          <img src="https://cdn.simpleicons.org/roku" alt="Roku" class="brand-logo">
+          <img src="assets/images/peacock.svg" alt="Peacock" class="brand-logo">
+          <img src="https://cdn.simpleicons.org/paramountplus" alt="Paramount" class="brand-logo">
+          <img src="https://cdn.simpleicons.org/sony" alt="Sony" class="brand-logo">
+          <img src="https://cdn.simpleicons.org/youtube" alt="YouTube TV" class="brand-logo">
+          <img src="https://cdn.simpleicons.org/google" alt="Google" class="brand-logo">
+          <img src="https://cdn.simpleicons.org/cbs" alt="CBS Sports" class="brand-logo">
+          <img src="https://cdn.simpleicons.org/cocacola" alt="Coca-Cola" class="brand-logo">
+          <img src="https://cdn.simpleicons.org/jeep" alt="Jeep" class="brand-logo">
+          <img src="assets/images/disney.svg" alt="Disney" class="brand-logo">
+          <img src="assets/images/espn.svg" alt="ESPN" class="brand-logo">
+          <img src="assets/images/blizzard.svg" alt="Blizzard" class="brand-logo">
+          <img src="assets/images/tastemade.png" alt="Tastemade" class="brand-logo">
+          <img src="assets/images/working%20title.webp" alt="Working Title" class="brand-logo">
+          <img src="assets/images/syfy.png" alt="Syfy" class="brand-logo">
+          <img src="assets/images/mattel.png" alt="Mattel" class="brand-logo">
+          <!-- Opaque/white-bg logos -->
+          <img src="assets/images/coachella.png" alt="Coachella" class="brand-logo brand-logo--opaque">
+          <img src="assets/images/funny%20or%20die.png" alt="Funny or Die" class="brand-logo brand-logo--opaque">
+          <img src="assets/images/michelob.png" alt="Michelob" class="brand-logo brand-logo--opaque">
+          <img src="assets/images/world%20surf%20league.webp" alt="World Surf League" class="brand-logo brand-logo--opaque">
+          <img src="assets/images/coors.jpeg" alt="Coors" class="brand-logo brand-logo--opaque">
+          <img src="assets/images/flighthouse_logo.jpeg" alt="Flighthouse" class="brand-logo brand-logo--opaque">
+          <img src="assets/images/olympics.png" alt="The Olympics" class="brand-logo brand-logo--opaque">
+          <img src="assets/images/hulu.png" alt="Hulu" class="brand-logo brand-logo--opaque">
+          <img src="assets/images/adult%20swim.png" alt="Adult Swim" class="brand-logo brand-logo--opaque">
+        </div>
+      </div>
+    </section>
+
+    <!-- ——————————————————————————————————————
+         SECTION 3 · COSMIC CREATIVE + PRODUCTION
+         —————————————————————————————————————— -->
+    <section id="creative" class="waypoint" data-waypoint="creative">
+      <div class="scene creative-scene">
+        <!-- Vertical video — left column -->
+        <div class="creative-video-wrap">
+          <iframe class="creative-video"
+            src="https://player.vimeo.com/video/1219699334?h=3a695f6bb4&autoplay=1&loop=1&muted=1&background=1&title=0&byline=0&portrait=0"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <!-- Text — right column -->
+        <div class="creative-content">
+          <h1 class="headline-xl gradient-text">COSMIC CREATIVE + PRODUCTION</h1>
+          <div class="divider-row">
+            <span class="crosshair">+</span>
+            <span class="divider-line"></span>
+          </div>
+          <p class="body-copy">
+            No matter the genre or format, Cosmic Monkey brings decades of experience across premium brands, distributors, and talent, infusing every creative partnership with content that always looks to subvert expectations.
+          </p>
+          <p class="body-copy">
+            Traditional media production doesn't have to include a traditional production model. Our in-house roster of producers, directors, editors, and production wizards wear multiple hats, allowing us to offer bespoke, full-service production and post-production capabilities to fit your needs.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ——————————————————————————————————————
+         SECTION 4 · ABOUT US / BIOS
+         Floating card layout after bios demo reference.
+         Layout structure only — visual style is CM dark-space language.
+         Content is stubbed; swap in real photos/copy when ready.
+         —————————————————————————————————————— -->
+    <section id="about" class="waypoint" data-waypoint="about">
+      <div class="scene about-scene">
+
+        <!-- Headline block top-left -->
+        <div class="about-headline">
+          <h2 class="headline-xl gradient-text">THIS IS US</h2>
+          <div class="divider-row">
+            <span class="crosshair">+</span>
+            <span class="divider-line"></span>
+          </div>
+        </div>
+
+        <!-- Three bio cards floating loosely across the section -->
+        <div class="bio-cards" aria-label="Team bios">
+
+          <!-- Colin — lower-left anchor, most prominent -->
+          <article class="bio-card bio-colin">
+            <div class="bio-card-inner">
+              <div class="bio-photo-wrap">
+                <div class="bio-photo-placeholder">
+                  <img src="assets/images/colin%20head%20shot.jpg" alt="Colin Goheen" class="bio-photo">
+                </div>
+              </div>
+              <div class="bio-info">
+                <h3 class="bio-name gradient-text">COLIN GOHEEN</h3>
+                <p class="bio-title">CEO / Creative Director</p>
+                <p class="bio-body">Colin got his start editing Adult Swim's Rick and Morty, before moving into producing, directing, and showrunning across TV and digital. As Executive Producer of Streaming TV at Jukin Media/TMB, he ran five global entertainment brands, leading a team of 30+ producers, writers, editors, and creatives, and built and launched the company's first slate of original long-form programming — including three 24/7 OTT channels. Over the course of his career he has produced, written, and directed more than 40 series and specials, as well as branded programming for Paramount, Sony, Disney, Hulu, SyFy, ABC Sports, CBS Sports, the Olympics, and Hershey's. Colin co-founded Cosmic Monkey with Ori, bringing multiple decades of network and streaming experience to a studio built around distinctive and original creative voices.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Ori — center, elevated -->
+          <article class="bio-card bio-ori">
+            <div class="bio-card-inner">
+              <div class="bio-photo-wrap">
+                <div class="bio-photo-placeholder">
+                  <img src="assets/images/Ori%20head%20shot%20.png" alt="Ori Guendelman" class="bio-photo">
+                </div>
+              </div>
+              <div class="bio-info">
+                <h3 class="bio-name gradient-text">ORI GUENDELMAN</h3>
+                <p class="bio-title">Chief Creative Officer</p>
+                <p class="bio-body">Ori is a writer/director/producer who gained attention for his first screenplay, BUMP, which landed in the top ten on the annual Black List before being picked up by Working Title for Zach Braff to direct. He has since worked in development rooms at Mattel and was hired by LD Entertainment to adapt the Bloomberg article GOING ROGUE for Jamie Dornan to star and produce. Most recently, Ori wrote, directed and produced his horror short film HOLD UP, which premiered at the Fantasia Film Festival and won Best International Short Film at the Brussels Fantastic Film Festival and Best Short Film at Panic Fest. He has also produced a variety of streaming series for multiple networks as well as content that can be seen on platforms including Roku, YoutubeTV, Tastemade and Netflix.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Joe — right side, slightly further back -->
+          <article class="bio-card bio-joe">
+            <div class="bio-card-inner">
+              <div class="bio-photo-wrap">
+                <div class="bio-photo-placeholder">
+                  <img src="assets/images/Joe%20head%20shot.png" alt="Joe Harkenrider" class="bio-photo">
+                </div>
+              </div>
+              <div class="bio-info">
+                <h3 class="bio-name gradient-text">JOE HARKENRIDER</h3>
+                <p class="bio-title">Head of Development</p>
+                <p class="bio-body">Joe is an Emmy Award-winning media executive and Executive Producer who has held roles at both networks and production companies developing unscripted and scripted series. Prior to Cosmic Monkey, Joe created and showran unscripted series for Hearst Television's FAST channel, Very Local, and broadcast affiliates — earning two Emmy Awards and four nominations. Prior to Hearst, he was part of development teams at Comedy Central, Comedy Bang! Bang! Productions, Jukin Media, GRB Studios, and Viacom, contributing to the development of hits including Tosh.0 (Comedy Central), Bajillion Dollar Propertie$ (Seeso), Neighborhood Wars (A&E), and Blind Kitchen (Hearst). He has 5+ years of experience working with creators and was invited to be a founding expert of the creator advisor platform, Friends We Trust.</p>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ——————————————————————————————————————
+         SECTION 4 · TV / FILM
+         Signal 1.3 — Full-frame: TV on asteroid platform, video screen overlay
+         —————————————————————————————————————— -->
+    <section id="tv-film" class="waypoint" data-waypoint="tv-film">
+      <div class="scene tvfilm-scene">
+
+        <!-- TV frame image with video overlay -->
+        <div class="tvfilm-float">
+          <div class="tv-chassis">
+            <img src="assets/images/tv_frame_16x9.png" alt="" class="tv-frame-img">
+            <div class="tv-screen-area">
+              <iframe
+                class="tvfilm-video"
+                src="https://player.vimeo.com/video/1219688565?h=7d10aeb5de&autoplay=1&loop=1&muted=1&background=1&title=0&byline=0&portrait=0"
+                allow="autoplay; fullscreen"
+                allowfullscreen
+                frameborder="0"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text block — Signal label sits directly above headline as a decorative tag -->
+        <div class="tvfilm-text">
+          <div class="signal-label tvfilm-signal">
+            <span class="crosshair">+</span> SIGNAL 1.3
+          </div>
+          <h2 class="headline-lg gradient-text">TV &amp;<br>STREAMING</h2>
+          <div class="divider-row">
+            <span class="crosshair">+</span>
+            <span class="divider-line"></span>
+          </div>
+          <p class="body-copy">
+            Long-form storytelling for the platforms that matter. From development
+            to delivery, we bring <span class="hl">premium quality</span> to scripted
+            and unscripted projects built for today's streaming landscape.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ——————————————————————————————————————
+         SECTION 5 · BRANDED CONTENT
+         Signal 1.1 — Floating CSS laptop
+         —————————————————————————————————————— -->
+    <section id="branded" class="waypoint" data-waypoint="branded">
+      <div class="scene branded-scene">
+
+        <!-- Laptop frame image with video overlay -->
+        <div class="branded-float">
+          <div class="laptop-chassis">
+            <img src="assets/images/laptop_frame_16x9.png?v=2" alt="" class="laptop-frame-img">
+            <div class="laptop-screen-area">
+              <iframe
+                class="branded-video"
+                src="https://player.vimeo.com/video/1219690840?h=516af30d6e&autoplay=1&loop=1&muted=1&background=1&title=0&byline=0&portrait=0"
+                allow="autoplay; fullscreen"
+                allowfullscreen
+                frameborder="0"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text block — signal label sits directly above headline -->
+        <div class="branded-text">
+          <div class="signal-label branded-signal">
+            <span class="crosshair">+</span> SIGNAL 1.1
+          </div>
+          <h2 class="headline-lg gradient-text">BRANDED<br>CONTENT</h2>
+          <div class="divider-row">
+            <span class="crosshair">+</span>
+            <span class="divider-line"></span>
+          </div>
+          <div class="copy-blocks">
+            <div class="copy-block">
+              <h4 class="copy-block-title">Branded Content</h4>
+              <p class="body-copy-sm">Take our cinematic tool-box and apply it seamlessly into your brand integration for kinetic visual storytelling that maximizes audience engagement. It helps that we've been lucky enough to work with some of our favorite brands so far.</p>
+            </div>
+            <div class="copy-block">
+              <h4 class="copy-block-title">Product Demos &amp; Trailers</h4>
+              <p class="body-copy-sm">We've seen the bad ones. The boring ones. This ain't that. Every product tells a story. How effectively you communicate that story determines how effectively your clients and customers connect to it. We believe that story should be as compelling, and exciting as the thing you're selling.</p>
+            </div>
+            <div class="copy-block">
+              <h4 class="copy-block-title">Commercials</h4>
+              <p class="body-copy-sm">Bread and butter. Peanut butter and jelly. Commercials. These are a few of our favorite things. Whether it's a 30 second spot or a longform product piece, this is the dinner table our family loves to gather around. Let's make some fun meals together.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ——————————————————————————————————————
+         SECTION 6 · VERTICAL
+         Signal 1.2 — Floating CSS phone (9:16 video)
+         —————————————————————————————————————— -->
+    <section id="vertical" class="waypoint" data-waypoint="vertical">
+      <div class="scene vertical-scene">
+
+        <!-- Floating CSS phone -->
+        <div class="vertical-float">
+          <div class="phone-chassis">
+            <div class="phone-screen-area">
+              <iframe
+                class="vertical-video"
+                src="https://player.vimeo.com/video/1219418797?h=2bc2561503&autoplay=1&loop=1&muted=1&background=1&title=0&byline=0&portrait=0"
+                allow="autoplay; fullscreen"
+                allowfullscreen
+                frameborder="0"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text block — signal label sits directly above headline -->
+        <div class="vertical-text">
+          <div class="signal-label vertical-signal">
+            <span class="crosshair">+</span> SIGNAL 1.2
+          </div>
+          <h2 class="headline-lg gradient-text">VERTICAL</h2>
+          <div class="divider-row">
+            <span class="crosshair">+</span>
+            <span class="divider-line"></span>
+          </div>
+          <div class="copy-blocks">
+            <div class="copy-block">
+              <h4 class="copy-block-title">Social First Series</h4>
+              <p class="body-copy-sm">Built for the scroll.
+                Engineered to stop it.</p>
+            </div>
+            <div class="copy-block">
+              <h4 class="copy-block-title">Platform Specific</h4>
+              <p class="body-copy-sm">TikTok. Reels. YouTube Shorts.
+                We know the rules — and exactly when to break them.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ——————————————————————————————————————
+         SECTION 7 · CONTACT
+         —————————————————————————————————————— -->
+    <section id="contact" class="waypoint" data-waypoint="contact">
+      <div class="scene contact-scene">
+
+        <div class="contact-content">
+          <div class="signal-label contact-signal">
+            <span class="crosshair">+</span> LET'S MAKE SOMETHING
+          </div>
+          <h2 class="headline-xl gradient-text">GET IN TOUCH</h2>
+          <div class="divider-row">
+            <span class="crosshair">+</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <a href="mailto:contact@cosmicmonkey.co" class="contact-email">
+            contact@cosmicmonkey.co
+          </a>
+
+          <div class="contact-socials">
+            <a href="https://instagram.com/cosmicmonkeyco" target="_blank" rel="noopener" class="contact-social-link">
+              <img src="https://cdn.simpleicons.org/instagram" alt="Instagram" class="contact-social-icon">
+              <span class="contact-social-handle">@cosmicmonkeyco</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GSAP 3 + ScrollTrigger + Lenis smooth scroll -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>
