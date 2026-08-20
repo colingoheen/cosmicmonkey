@@ -428,47 +428,26 @@ em  { font-style: normal; }
   max-width: 520px;
 }
 
-/* BTS video placeholder — fills the right column top-to-bottom */
+/* BTS video — right column, sized to 16:9 so no dark letterbox area */
 .whats-video-wrap {
   flex: 1 1 auto;
-  align-self: stretch;
+  align-self: center;
   display: flex;
   flex-direction: column;
-  padding: 14vh 6cqw 14vh 8cqw;
+  min-width: 0;
   position: relative;
 }
 
 .whats-video {
-  flex: 1 1 auto;
-  min-height: 0;
   width: 100%;
+  aspect-ratio: 16 / 9;
   display: block;
   background: #07071a;
   border-radius: 10px;
   border: none;
-  box-shadow:
-    0 0 60px rgba(100, 80, 220, 0.22);
+  box-shadow: 0 0 70px rgba(100, 80, 220, 0.32);
 }
 
-/* Hidden now that video is live */
-.whats-video-wrap::before {
-  content: '';
-  position: absolute;
-  top: 6vh;
-  left: 0;
-  right: 6vw;
-  bottom: calc(6vh + 32px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: rgba(180, 160, 255, 0.25);
-  pointer-events: none;
-  border-radius: 10px;
-}
 
 .whats-video-label {
   flex: 0 0 auto;
