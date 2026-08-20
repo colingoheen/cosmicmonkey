@@ -1474,6 +1474,7 @@ em  { font-style: normal; }
   }
   .tvfilm-text .headline-lg { font-size: clamp(2rem, 8vw, 4rem); }
   .tvfilm-text .divider-row { justify-content: center; }
+  .tvfilm-text .body-copy { text-align: center; margin: 0 auto; }
 
   /* ---- #BRANDED — same pattern as TV ---- */
   .branded-scene {
@@ -1497,6 +1498,7 @@ em  { font-style: normal; }
     text-align: center;
   }
   .branded-text .divider-row { justify-content: center; }
+  .branded-text .body-copy-sm { text-align: center; margin: 0 auto; }
 
   /* ---- #VERTICAL — prop-layout stacks automatically ---- */
   .prop-layout {
@@ -1529,6 +1531,7 @@ em  { font-style: normal; }
     text-align: center;
   }
   .vertical-text .divider-row { justify-content: center; }
+  .vertical-text .body-copy-sm { text-align: center; margin: 0 auto; }
 
   /* ---- CONTACT ---- */
   .contact-scene { padding: 0 6vw; }
