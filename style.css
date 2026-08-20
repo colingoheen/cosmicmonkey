@@ -1384,9 +1384,11 @@ em  { font-style: normal; }
   .creative-content  { width: 46vw; }
   .creative-video-wrap { width: 24vw; }
 
-  /* TV / Branded text blocks — less cramped */
+  /* TV / Branded — shrink devices and pull text left so they don't overlap */
+  .tv-chassis        { width: min(46vw, 520px); }
+  .laptop-chassis    { width: min(48vw, 540px); }
   .tvfilm-text,
-  .branded-text      { width: min(320px, 30vw); }
+  .branded-text      { left: 5vw; width: min(300px, 26vw); }
 
   /* Prop images — slightly smaller so they don't crowd text */
   .prop-img          { max-height: 58vh; }
