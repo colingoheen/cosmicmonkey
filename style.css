@@ -440,7 +440,7 @@ em  { font-style: normal; }
 
 .whats-video {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1 / 1;
   display: block;
   background: #07071a;
   border-radius: 10px;
@@ -1377,7 +1377,7 @@ em  { font-style: normal; }
   .whats-scene       { padding: 0 4vw 0 6vw; gap: 3vw; align-items: center; }
   .whats-content     { flex: 1 1 auto; max-width: 320px; min-width: 0; }
   .whats-video-wrap  { flex: 0 0 44vw; align-self: center; padding: 0 2vw; }
-  .whats-video       { aspect-ratio: 16 / 9; width: 100%; flex: 0 0 auto; }
+  .whats-video       { aspect-ratio: 1 / 1; width: 100%; flex: 0 0 auto; }
 
   /* #creative — tighter padding */
   .creative-scene    { padding: 0 5vw; gap: 4vw; }
