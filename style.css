@@ -1367,6 +1367,32 @@ em  { font-style: normal; }
 }
 
 /* ============================================================
+   RESPONSIVE — TABLET / SQUISHED DESKTOP (769px – 1150px)
+   Tames the large headline and rebalances two-column layouts
+   at intermediate widths without touching the desktop layout.
+   ============================================================ */
+@media (min-width: 769px) and (max-width: 1150px) {
+  .headline-xl { font-size: clamp(2.2rem, 5.5vw, 5rem); }
+
+  /* #whats — tighter padding so video has more room */
+  .whats-scene       { padding: 0 4vw 0 6vw; gap: 3vw; }
+  .whats-content     { max-width: 400px; }
+  .whats-video-wrap  { padding: 8vh 4vw 8vh 4vw; }
+
+  /* #creative — tighter padding */
+  .creative-scene    { padding: 0 5vw; gap: 4vw; }
+  .creative-content  { width: 46vw; }
+  .creative-video-wrap { width: 24vw; }
+
+  /* TV / Branded text blocks — less cramped */
+  .tvfilm-text,
+  .branded-text      { width: min(320px, 30vw); }
+
+  /* Prop images — slightly smaller so they don't crowd text */
+  .prop-img          { max-height: 58vh; }
+}
+
+/* ============================================================
    RESPONSIVE — MOBILE ADJUSTMENTS
    ============================================================ */
 @media (max-width: 768px) {
