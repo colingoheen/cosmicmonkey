@@ -863,6 +863,9 @@ em  { font-style: normal; }
   overflow: visible;
 }
 
+/* Bio detail panel — mobile only; hidden on desktop */
+.bio-detail { display: none; }
+
 /* Faint star-crosshair accents scattered around bios section */
 .about-scene::before,
 .about-scene::after {
@@ -1442,14 +1445,105 @@ em  { font-style: normal; }
   .creative-content .body-copy    { text-align: center; margin: 0 auto; }
   .creative-content .headline-xl  { font-size: clamp(1.6rem, 6vw, 3.8rem); }
 
-  /* ---- #ABOUT — keep floating orbs but fit within viewport ---- */
-  .bio-card  { width: 120px; }
-  .bio-colin { left: 20%; }
-  .bio-ori   { left: 50%; }
-  .bio-joe   { left: 80%; }
-  /* Bio body stays hidden; hover isn't reliable on touch */
+  /* ---- #ABOUT — row of tappable ovals + shared bio panel ---- */
+  #about .scene {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 6vh;
+    overflow: hidden;
+  }
+  .about-headline {
+    position: relative;
+    top: auto; left: auto;
+    transform: none;
+    text-align: center;
+    white-space: normal;
+    margin-bottom: 3vh;
+  }
+  .bio-cards {
+    position: relative;
+    inset: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6vw;
+    width: 100%;
+    padding: 0 4vw;
+  }
+  .bio-card {
+    position: relative;
+    left: auto !important;
+    top: auto !important;
+    width: 90px;
+    animation: none;
+    transform: none !important;
+    opacity: 0.45;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+  }
+  .bio-card.bio-active { opacity: 1; }
+  .bio-card.bio-active .bio-photo-placeholder {
+    box-shadow: 0 0 22px rgba(160, 130, 255, 0.55);
+  }
+  .bio-photo-placeholder,
+  .bio-ori .bio-photo-placeholder,
+  .bio-joe .bio-photo-placeholder {
+    width: 90px;
+    height: 90px;
+  }
+  /* Hide per-card text; shown in shared panel instead */
+  .bio-info { display: none; }
   .bio-card:hover .bio-card-inner { transform: none; }
-  .bio-card:hover .bio-body       { max-height: 0; opacity: 0; }
+
+  /* Shared bio detail panel, slides open below the ovals */
+  .bio-detail {
+    display: block;
+    width: 100%;
+    padding: 0 6vw;
+    max-height: 0;
+    overflow-y: auto;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    text-align: center;
+    -webkit-overflow-scrolling: touch;
+  }
+  .bio-detail.bio-open {
+    max-height: 52vh;
+    opacity: 1;
+    padding-top: 2.5vh;
+  }
+  .bio-detail-name {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--holo);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    background-size: 200% 100%;
+    margin-bottom: 4px;
+  }
+  .bio-detail-role {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 12px;
+  }
+  .bio-detail-body {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: rgba(220, 215, 255, 0.82);
+    text-align: center;
+  }
 
   /* ---- #TV-FILM — stack to column on mobile ---- */
   .tvfilm-scene {

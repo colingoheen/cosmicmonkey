@@ -418,9 +418,54 @@ if (bioCards.length) {
         trigger: '#about',
         start:   'top 60%',
         end:     'top 20%',
-        scrub:   false,  // plays once, not scrubbed
+        scrub:   false,
         toggleActions: 'play none none reverse',
       },
     }
   );
 }
+
+/* ---------------------------------------------------------------
+   7. MOBILE BIO TAP INTERACTION
+   Tapping an oval opens a shared detail panel below with that
+   person's bio. Tapping the same oval again collapses it.
+   Only active on mobile (≤768px).
+   --------------------------------------------------------------- */
+(function initMobileBios() {
+  if (window.innerWidth > 768) return;
+
+  const cards  = document.querySelectorAll('.bio-card');
+  const detail = document.getElementById('bio-detail');
+  if (!detail || !cards.length) return;
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const already = card.classList.contains('bio-active');
+
+      // Collapse any open panel first
+      cards.forEach(c => c.classList.remove('bio-active'));
+      detail.classList.remove('bio-open');
+
+      if (already) {
+        // Second tap on same card: just collapse
+        setTimeout(() => { detail.innerHTML = ''; }, 400);
+        return;
+      }
+
+      // Populate and open
+      const name  = card.querySelector('.bio-name')?.textContent  || '';
+      const role  = card.querySelector('.bio-title')?.textContent || '';
+      const body  = card.querySelector('.bio-body')?.textContent  || '';
+
+      detail.innerHTML = `
+        <p class="bio-detail-name">${name}</p>
+        <p class="bio-detail-role">${role}</p>
+        <p class="bio-detail-body">${body}</p>
+      `;
+
+      card.classList.add('bio-active');
+      // rAF ensures max-height transition fires after display
+      requestAnimationFrame(() => detail.classList.add('bio-open'));
+    });
+  });
+})();
