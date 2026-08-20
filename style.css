@@ -404,24 +404,25 @@ em  { font-style: normal; }
 }
 
 .whats-content {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   max-width: 520px;
+  min-width: 0;
 }
 
-/* BTS video placeholder — fills the right column top-to-bottom */
+/* BTS video — always 50% of viewport width, 16:9 aspect ratio */
 .whats-video-wrap {
-  flex: 1 1 auto;
-  align-self: stretch;
+  flex: 0 0 50vw;
+  align-self: center;
   display: flex;
   flex-direction: column;
-  padding: 14vh 6vw 14vh 8vw;
+  padding: 0 3vw;
   position: relative;
 }
 
 .whats-video {
-  flex: 1 1 auto;
-  min-height: 0;
   width: 100%;
+  aspect-ratio: 16 / 9;
+  flex: none;
   display: block;
   background: #07071a;
   border-radius: 10px;
@@ -1374,11 +1375,9 @@ em  { font-style: normal; }
 @media (min-width: 769px) and (max-width: 1150px) {
   .headline-xl { font-size: clamp(2.2rem, 5.5vw, 5rem); }
 
-  /* #whats — fix video width so it stays prominent; text column narrows + wraps taller */
-  .whats-scene       { padding: 0 4vw 0 6vw; gap: 3vw; align-items: center; }
-  .whats-content     { flex: 1 1 auto; max-width: 320px; min-width: 0; }
-  .whats-video-wrap  { flex: 0 0 44vw; align-self: center; padding: 0 2vw; }
-  .whats-video       { aspect-ratio: 16 / 9; width: 100%; flex: 0 0 auto; }
+  /* #whats — tighten scene padding at tablet; video sizing handled by base rule */
+  .whats-scene       { padding: 0 3vw 0 4vw; gap: 2vw; }
+  .whats-content     { max-width: 300px; }
 
   /* #creative — tighter padding */
   .creative-scene    { padding: 0 5vw; gap: 4vw; }
