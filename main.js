@@ -66,21 +66,27 @@
 })();
 
 /* ---------------------------------------------------------------
-   1. LENIS SMOOTH SCROLL
+   1. LENIS SMOOTH SCROLL (desktop only)
+   On mobile, Lenis intercepts native touch scroll and runs a
+   full RAF loop, making the site feel laggy. Native scroll is
+   faster on touch devices; ScrollTrigger works fine without it.
    --------------------------------------------------------------- */
-const lenis = new Lenis({
+gsap.registerPlugin(ScrollTrigger);
+
+const IS_MOBILE = window.innerWidth <= 768;
+
+const lenis = IS_MOBILE ? null : new Lenis({
   duration: 1.3,
   easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   smoothWheel: true,
   wheelMultiplier: 0.9,
 });
 
-gsap.registerPlugin(ScrollTrigger);
-
-// Wire Lenis → GSAP ticker so ScrollTrigger sees smooth positions
-gsap.ticker.add(time => lenis.raf(time * 1000));
-gsap.ticker.lagSmoothing(0);
-lenis.on('scroll', ScrollTrigger.update);
+if (lenis) {
+  gsap.ticker.add(time => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+  lenis.on('scroll', ScrollTrigger.update);
+}
 
 /* ---------------------------------------------------------------
    2. SPLASH SPACE DUST
@@ -238,7 +244,11 @@ const stars = LAYERS.flatMap(layer =>
 );
 
 let scrollY = 0;
-lenis.on('scroll', e => { scrollY = e.scroll; });
+if (lenis) {
+  lenis.on('scroll', e => { scrollY = e.scroll; });
+} else {
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+}
 
 function drawStars(ts) {
   ctx.clearRect(0, 0, W, H);
