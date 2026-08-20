@@ -1370,24 +1370,122 @@ em  { font-style: normal; }
    RESPONSIVE — MOBILE ADJUSTMENTS
    ============================================================ */
 @media (max-width: 768px) {
+
+  /* ---- GLOBAL ---- */
+  .bar-system,
+  .bar-accent-text { display: none; }
+
+  /* ---- SPLASH ---- */
+  .splash-word { font-size: clamp(3.8rem, 18vw, 7rem); }
+
+  /* ---- #WHATS — stack to single column, hide video ---- */
+  .whats-scene {
+    flex-direction: column;
+    padding: 0 6vw;
+    justify-content: center;
+    gap: 3vh;
+    align-items: flex-start;
+  }
+  .whats-content  { max-width: 100%; }
+  .whats-video-wrap { display: none; }
+  .whats-orb        { display: none; }
+
+  /* ---- #CREATIVE — stack video above content ---- */
+  .creative-scene {
+    flex-direction: column;
+    padding: 0 6vw;
+    gap: 2vh;
+    justify-content: center;
+    align-items: center;
+  }
+  .creative-video-wrap { width: 42vw; }
+  .creative-content {
+    width: 100%;
+    text-align: center;
+  }
+  .creative-content .divider-row  { justify-content: center; }
+  .creative-content .body-copy    { text-align: center; margin: 0 auto; }
+  .creative-content .headline-xl  { font-size: clamp(1.6rem, 6vw, 3.8rem); }
+
+  /* ---- #ABOUT — keep floating orbs but fit within viewport ---- */
+  .bio-card  { width: 120px; }
+  .bio-colin { left: 20%; }
+  .bio-ori   { left: 50%; }
+  .bio-joe   { left: 80%; }
+  /* Bio body stays hidden; hover isn't reliable on touch */
+  .bio-card:hover .bio-card-inner { transform: none; }
+  .bio-card:hover .bio-body       { max-height: 0; opacity: 0; }
+
+  /* ---- #TV-FILM — convert absolute layout to flex column ---- */
+  .tvfilm-scene {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+    padding: 5vh 6vw;
+  }
+  .tvfilm-float {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none !important;
+    animation: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .tv-chassis { width: min(82vw, 360px); }
+  .tvfilm-text {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+  }
+  .tvfilm-text .headline-lg { font-size: clamp(2rem, 8vw, 4rem); }
+
+  /* ---- #BRANDED — same pattern as TV ---- */
+  .branded-scene {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+    padding: 5vh 6vw;
+  }
+  .branded-float {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none !important;
+    animation: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .laptop-chassis { width: min(82vw, 360px); }
+  .branded-text {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+  }
+
+  /* ---- #VERTICAL — prop-layout stacks automatically ---- */
   .prop-layout {
     flex-direction: column;
     justify-content: center;
     gap: 24px;
   }
-
   .prop-text { width: 100%; max-width: 100%; }
   .prop-layout--phone .prop-visual,
   .prop-layout--phone .prop-text { order: unset; }
 
-  .whats-orb { display: none; }
+  /* ---- BRANDS INTERSTITIAL ---- */
+  .brand-logo { width: 100px; height: 45px; }
+  .brands-interstitial { padding: 4vh 4vw; }
+  .brands-label .divider-line { display: none; }
 
-  .bio-card { width: 140px; }
-  .bio-colin { left: 5%; }
-  .bio-ori   { left: 38%; }
-
-  .splash-word { font-size: clamp(3.8rem, 18vw, 7rem); }
-
-  .bar-system,
-  .bar-accent-text { display: none; }
+  /* ---- CONTACT ---- */
+  .contact-email { font-size: clamp(1.1rem, 5vw, 2rem); }
 }
