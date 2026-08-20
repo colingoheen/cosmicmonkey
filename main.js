@@ -1,5 +1,9 @@
 /* ============================================================
    COSMIC MONKEY — main.js
+
+   Performance note: Vimeo iframes use data-src and are loaded
+   lazily by initLazyIframes() at the bottom of this file.
+   ============================================================ */
    Starfield canvas + Lenis smooth scroll + GSAP flythrough
    ============================================================ */
 
@@ -214,11 +218,12 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Build star pool
+// Build star pool — halved on mobile to cut canvas CPU
+const isMobile = window.innerWidth <= 768;
 const LAYERS = [
-  { count: 220, r: 0.7,  opacity: 0.50, parallax: 0.04 },  // far, slow
-  { count: 110, r: 1.1,  opacity: 0.72, parallax: 0.10 },  // mid
-  { count:  55, r: 1.7,  opacity: 0.95, parallax: 0.22 },  // near, fast
+  { count: isMobile ?  90 : 220, r: 0.7,  opacity: 0.50, parallax: 0.04 },
+  { count: isMobile ?  45 : 110, r: 1.1,  opacity: 0.72, parallax: 0.10 },
+  { count: isMobile ?  20 :  55, r: 1.7,  opacity: 0.95, parallax: 0.22 },
 ];
 
 const stars = LAYERS.flatMap(layer =>
@@ -426,7 +431,29 @@ if (bioCards.length) {
 }
 
 /* ---------------------------------------------------------------
-   7. MOBILE BIO TAP INTERACTION
+   7. LAZY-LOAD VIMEO IFRAMES
+   All iframes use data-src so they don't connect to Vimeo on
+   page load. IntersectionObserver promotes data-src → src when
+   the section is 400px from entering the viewport.
+   --------------------------------------------------------------- */
+(function initLazyIframes() {
+  const iframes = document.querySelectorAll('iframe[data-src]');
+  if (!iframes.length) return;
+
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      const iframe = entry.target;
+      iframe.src = iframe.dataset.src;
+      observer.unobserve(iframe);
+    });
+  }, { rootMargin: '400px' });
+
+  iframes.forEach(function (iframe) { observer.observe(iframe); });
+})();
+
+/* ---------------------------------------------------------------
+   8. MOBILE BIO TAP INTERACTION
    Tapping an oval opens a shared detail panel below with that
    person's bio. Tapping the same oval again collapses it.
    Only active on mobile (≤768px).
