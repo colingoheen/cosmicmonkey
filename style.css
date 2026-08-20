@@ -290,6 +290,25 @@ em  { font-style: normal; }
 .bar-slogan  { color: rgba(255,255,255,0.32); }
 
 /* ============================================================
+   SCALE ROOT — proportional viewport zoom (desktop only)
+   JS sets width + zoom on #scale-root at runtime.
+   Fixed chrome (#ui-layer, #space-env) lives outside this div.
+   ============================================================ */
+#scale-root {
+  /* JS writes: width: 1440px; zoom: <scale>; margin-left: <x>px */
+  /* Nothing to set here — all applied dynamically */
+}
+
+/* Hard-reset on mobile so JS inline styles can't interfere */
+@media (max-width: 899px) {
+  #scale-root {
+    width: 100% !important;
+    zoom: 1 !important;
+    margin-left: 0 !important;
+  }
+}
+
+/* ============================================================
    SCROLL ROOT + WAYPOINT SECTIONS
    ============================================================ */
 #scroll-root {

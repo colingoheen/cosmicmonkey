@@ -4,6 +4,64 @@
    ============================================================ */
 
 /* ---------------------------------------------------------------
+   0. PROPORTIONAL SCALE-TO-FIT
+   Locks the design to a 1440px canvas and zooms it to fit the
+   viewport. Runs before Lenis/GSAP so layout is settled when
+   ScrollTrigger calculates pin positions.
+
+   Constraints:
+     - min scale 0.65  → below this, mobile layout takes over
+     - max scale 1.35  → beyond this, canvas centers with margins
+     - below 900px viewport → zoom disabled, mobile CSS handles it
+   --------------------------------------------------------------- */
+(function initScale() {
+  const DESIGN_W  = 1440;
+  const MIN_SCALE = 0.65;
+  const MAX_SCALE = 1.35;
+  const MOBILE_BP = 900;
+
+  const root = document.getElementById('scale-root');
+  if (!root) return;
+
+  let rafTimer;
+
+  function applyScale() {
+    const vw = window.innerWidth;
+
+    if (vw < MOBILE_BP) {
+      // Hand off to mobile/tablet CSS — clear any inline overrides
+      root.style.width      = '';
+      root.style.zoom       = '';
+      root.style.marginLeft = '';
+      return;
+    }
+
+    const raw   = vw / DESIGN_W;
+    const scale = Math.min(Math.max(raw, MIN_SCALE), MAX_SCALE);
+
+    root.style.width = DESIGN_W + 'px';
+    root.style.zoom  = scale;
+
+    // Ultrawide: center the canvas with equal side margins
+    root.style.marginLeft = raw > MAX_SCALE
+      ? ((vw - DESIGN_W * MAX_SCALE) / 2) + 'px'
+      : '';
+  }
+
+  // Debounced resize — also refreshes ScrollTrigger after layout settles
+  window.addEventListener('resize', function () {
+    cancelAnimationFrame(rafTimer);
+    rafTimer = requestAnimationFrame(function () {
+      applyScale();
+      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+    });
+  });
+
+  // Apply immediately so layout is correct before GSAP/Lenis init
+  applyScale();
+})();
+
+/* ---------------------------------------------------------------
    1. LENIS SMOOTH SCROLL
    --------------------------------------------------------------- */
 const lenis = new Lenis({
