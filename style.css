@@ -1403,17 +1403,27 @@ em  { font-style: normal; }
   /* ---- SPLASH ---- */
   .splash-word { font-size: clamp(3.8rem, 18vw, 7rem); }
 
-  /* ---- #WHATS — stack to single column, hide video ---- */
+  /* ---- #WHATS — stack to single column, video above text ---- */
   .whats-scene {
     flex-direction: column;
     padding: 0 6vw;
     justify-content: center;
     gap: 3vh;
-    align-items: flex-start;
+    align-items: center;
   }
-  .whats-content  { max-width: 100%; }
-  .whats-video-wrap { display: none; }
-  .whats-orb        { display: none; }
+  .whats-content {
+    max-width: 100%;
+    text-align: center;
+  }
+  .whats-content .divider-row { justify-content: center; }
+  .whats-video-wrap {
+    order: -1;
+    flex: 0 0 auto;
+    width: 70vw;
+    align-self: center;
+    min-width: 0;
+  }
+  .whats-orb { display: none; }
 
   /* ---- #CREATIVE — stack video above content ---- */
   .creative-scene {
@@ -1460,8 +1470,10 @@ em  { font-style: normal; }
   .tvfilm-text {
     width: 100%;
     order: 2;
+    text-align: center;
   }
   .tvfilm-text .headline-lg { font-size: clamp(2rem, 8vw, 4rem); }
+  .tvfilm-text .divider-row { justify-content: center; }
 
   /* ---- #BRANDED — same pattern as TV ---- */
   .branded-scene {
@@ -1482,7 +1494,9 @@ em  { font-style: normal; }
   .branded-text {
     width: 100%;
     order: 2;
+    text-align: center;
   }
+  .branded-text .divider-row { justify-content: center; }
 
   /* ---- #VERTICAL — prop-layout stacks automatically ---- */
   .prop-layout {
@@ -1498,7 +1512,28 @@ em  { font-style: normal; }
   .brand-logo { width: 100px; height: 45px; }
   .brands-interstitial { padding: 4vh 4vw; }
   .brands-label .divider-line { display: none; }
+  .brands-label { justify-content: center; }
+
+  /* ---- #VERTICAL — stack phone above text; fix headline clipping ---- */
+  .vertical-scene {
+    flex-direction: column;
+    padding: 3vh 6vw 0;
+    gap: 2vh;
+    justify-content: center;
+  }
+  .vertical-float { order: -1; animation: none; }
+  .phone-chassis  { width: min(45vw, 180px); }
+  .vertical-text  {
+    width: 100%;
+    order: 1;
+    text-align: center;
+  }
+  .vertical-text .divider-row { justify-content: center; }
 
   /* ---- CONTACT ---- */
+  .contact-scene { padding: 0 6vw; }
   .contact-email { font-size: clamp(1.1rem, 5vw, 2rem); }
+  .contact-content { text-align: center; align-items: center; }
+  .contact-content .divider-row { justify-content: center; }
+  .contact-socials { justify-content: center; }
 }
