@@ -1097,19 +1097,20 @@ em  { font-style: normal; }
 .branded-scene {
   padding: 0 6cqw;
   align-items: center;
+  justify-content: center;
+  gap: 5cqw;
 }
 
 .branded-float {
-  position: absolute;
-  right: 7cqw;
-  top: 50%;
-  animation: tv-float 8s ease-in-out infinite;
+  flex: 0 0 auto;
+  order: 2;
+  animation: laptop-float 8s ease-in-out infinite;
   animation-delay: -2s;
 }
 
 @keyframes laptop-float {
-  0%, 100% { transform: translateY(-50%); }
-  50%       { transform: translateY(calc(-50% - 14px)); }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-14px); }
 }
 
 /* Chassis is now a sized wrapper around the PNG */
@@ -1164,12 +1165,10 @@ em  { font-style: normal; }
   object-fit: cover;
 }
 
-/* Text block — same positioning as TV & Film */
+/* Text block — flex child, left of laptop */
 .branded-text {
-  position: absolute;
-  left: 18cqw;
-  top: 50%;
-  transform: translateY(-50%);
+  flex: 0 0 auto;
+  order: 1;
   width: min(340px, 26cqw);
   z-index: 2;
 }
@@ -1191,20 +1190,20 @@ em  { font-style: normal; }
 .tvfilm-scene {
   padding: 0 6cqw;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
+  gap: 5cqw;
 }
 
-/* Floating wrapper — right half of the scene, gentle vertical drift */
+/* Floating wrapper — flex child, gentle vertical drift */
 .tvfilm-float {
-  position: absolute;
-  right: 3cqw;
-  top: 50%;
+  flex: 0 0 auto;
+  order: 2;
   animation: tv-float 7s ease-in-out infinite;
 }
 
 @keyframes tv-float {
-  0%, 100% { transform: translateY(-50%); }
-  50%       { transform: translateY(calc(-50% - 18px)); }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-18px); }
 }
 
 /* Outer chassis — the dark TV body */
@@ -1260,12 +1259,10 @@ em  { font-style: normal; }
   border: none;
 }
 
-/* Text block — cleared right of the nav logo watermark */
+/* Text block — flex child, left of TV */
 .tvfilm-text {
-  position: absolute;
-  left: 18cqw;
-  top: 50%;
-  transform: translateY(-50%);
+  flex: 0 0 auto;
+  order: 1;
   width: min(340px, 26cqw);
   z-index: 2;
 }
@@ -1444,7 +1441,7 @@ em  { font-style: normal; }
   .bio-card:hover .bio-card-inner { transform: none; }
   .bio-card:hover .bio-body       { max-height: 0; opacity: 0; }
 
-  /* ---- #TV-FILM — convert absolute layout to flex column ---- */
+  /* ---- #TV-FILM — stack to column on mobile ---- */
   .tvfilm-scene {
     flex-direction: column;
     align-items: center;
@@ -1453,22 +1450,16 @@ em  { font-style: normal; }
     padding: 5vh 6vw;
   }
   .tvfilm-float {
-    position: relative;
-    right: auto;
-    top: auto;
-    transform: none !important;
     animation: none;
     width: 100%;
     display: flex;
     justify-content: center;
+    order: 1;
   }
   .tv-chassis { width: min(82vw, 360px); }
   .tvfilm-text {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
     width: 100%;
+    order: 2;
   }
   .tvfilm-text .headline-lg { font-size: clamp(2rem, 8vw, 4rem); }
 
@@ -1481,22 +1472,16 @@ em  { font-style: normal; }
     padding: 5vh 6vw;
   }
   .branded-float {
-    position: relative;
-    right: auto;
-    top: auto;
-    transform: none !important;
     animation: none;
     width: 100%;
     display: flex;
     justify-content: center;
+    order: 1;
   }
   .laptop-chassis { width: min(82vw, 360px); }
   .branded-text {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
     width: 100%;
+    order: 2;
   }
 
   /* ---- #VERTICAL — prop-layout stacks automatically ---- */
