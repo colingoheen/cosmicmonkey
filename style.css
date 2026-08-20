@@ -79,7 +79,7 @@ em  { font-style: normal; }
 .headline-xl {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(3.5rem, 9vw, 8rem);
+  font-size: clamp(3.5rem, 9cqw, 8rem);
   line-height: 0.92;
   letter-spacing: -0.01em;
   text-transform: uppercase;
@@ -88,7 +88,7 @@ em  { font-style: normal; }
 .headline-lg {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-size: clamp(2.8rem, 6cqw, 5.5rem);
   line-height: 0.92;
   letter-spacing: -0.01em;
   text-transform: uppercase;
@@ -97,7 +97,7 @@ em  { font-style: normal; }
 .body-copy {
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  font-size: clamp(0.95rem, 1.4cqw, 1.15rem);
   line-height: 1.65;
   color: var(--text);
   max-width: 480px;
@@ -106,7 +106,7 @@ em  { font-style: normal; }
 .body-copy-sm {
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: clamp(0.82rem, 1.1vw, 0.95rem);
+  font-size: clamp(0.82rem, 1.1cqw, 0.95rem);
   line-height: 1.6;
   color: var(--text-dim);
   max-width: 340px;
@@ -143,7 +143,7 @@ em  { font-style: normal; }
 .signal-label {
   position: absolute;
   top: 10vh;
-  left: 6vw;
+  left: 6cqw;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.72rem;
@@ -296,7 +296,8 @@ em  { font-style: normal; }
    ============================================================ */
 #scale-root {
   /* JS writes: width: 1440px; zoom: <scale>; margin-left: <x>px */
-  /* Nothing to set here — all applied dynamically */
+  /* container-type: inline-size makes 1cqw = 1% of 1440px, unaffected by viewport vw */
+  container-type: inline-size;
 }
 
 /* Hard-reset on mobile so JS inline styles can't interfere */
@@ -417,8 +418,8 @@ em  { font-style: normal; }
    SECTION 2 — WHAT'S A COSMIC MONKEY
    ============================================================ */
 .whats-scene {
-  padding: 0 6vw 0 10vw;
-  gap: 5vw;
+  padding: 0 6cqw 0 10cqw;
+  gap: 5cqw;
   align-items: center;
 }
 
@@ -433,7 +434,7 @@ em  { font-style: normal; }
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  padding: 14vh 6vw 14vh 8vw;
+  padding: 14vh 6cqw 14vh 8cqw;
   position: relative;
 }
 
@@ -493,7 +494,7 @@ em  { font-style: normal; }
   flex-direction: column;
   align-items: center;
   gap: 3.5vh;
-  padding: 5vh 8vw;
+  padding: 5vh 8cqw;
 }
 
 .brands-label {
@@ -529,8 +530,8 @@ em  { font-style: normal; }
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 3.5vh 5vw;
-  max-width: 80vw;
+  gap: 3.5vh 5cqw;
+  max-width: 80cqw;
 }
 
 .brand-logo {
@@ -567,14 +568,14 @@ em  { font-style: normal; }
 .creative-scene {
   justify-content: center;
   align-items: center;
-  padding: 0 7vw;
-  gap: 5vw;
+  padding: 0 7cqw;
+  gap: 5cqw;
 }
 
 /* Vertical video — left column */
 .creative-video-wrap {
   flex: 0 0 auto;
-  width: 22vw;
+  width: 22cqw;
   align-self: center;
 }
 
@@ -590,7 +591,7 @@ em  { font-style: normal; }
 
 .creative-content {
   flex: 0 0 auto;
-  width: 42vw;
+  width: 42cqw;
   text-align: left;
 }
 
@@ -599,7 +600,7 @@ em  { font-style: normal; }
 }
 
 .creative-content .headline-xl {
-  font-size: clamp(1rem, 3vw, 3.8rem);
+  font-size: clamp(1rem, 3cqw, 3.8rem);
 }
 
 .creative-content .body-copy {
@@ -614,7 +615,7 @@ em  { font-style: normal; }
 /* Decorative planet — right side */
 .whats-orb {
   position: absolute;
-  right: 8vw;
+  right: 8cqw;
   top: 50%;
   transform: translateY(-50%);
   width: 260px;
@@ -902,14 +903,14 @@ em  { font-style: normal; }
    Shared layout: signal label + left text + right prop
    ============================================================ */
 .prop-scene {
-  padding: 0 6vw;
+  padding: 0 6cqw;
   position: relative;
 }
 
 .prop-layout {
   display: flex;
   align-items: center;
-  gap: 4vw;
+  gap: 4cqw;
   width: 100%;
   height: 100%;
   padding: 0;
@@ -917,7 +918,7 @@ em  { font-style: normal; }
 
 .prop-text {
   flex: 0 0 auto;
-  width: min(400px, 38vw);
+  width: min(400px, 38cqw);
   display: flex;
   flex-direction: column;
 }
@@ -1007,10 +1008,10 @@ em  { font-style: normal; }
    text at 18vw left, portrait phone floating right.
    ============================================================ */
 .vertical-scene {
-  padding: 0 8vw;
+  padding: 0 8cqw;
   justify-content: center;
   align-items: center;
-  gap: 7vw;
+  gap: 7cqw;
 }
 
 .vertical-float {
@@ -1028,7 +1029,7 @@ em  { font-style: normal; }
 /* Phone outer shell — portrait, heavily rounded */
 .phone-chassis {
   position: relative;
-  width: min(27vw, 390px);
+  width: min(27cqw, 390px);
   background: #12121e;
   border: 10px solid #1c1c2e;
   border-radius: 36px;
@@ -1096,7 +1097,7 @@ em  { font-style: normal; }
 .vertical-text {
   flex: 0 0 auto;
   order: 1;
-  width: min(340px, 26vw);
+  width: min(340px, 26cqw);
   z-index: 2;
 }
 
@@ -1115,13 +1116,13 @@ em  { font-style: normal; }
    text at 18vw left, CSS prop floating on the right.
    ============================================================ */
 .branded-scene {
-  padding: 0 6vw;
+  padding: 0 6cqw;
   align-items: center;
 }
 
 .branded-float {
   position: absolute;
-  right: 7vw;
+  right: 7cqw;
   top: 50%;
   animation: tv-float 8s ease-in-out infinite;
   animation-delay: -2s;
@@ -1135,7 +1136,7 @@ em  { font-style: normal; }
 /* Chassis is now a sized wrapper around the PNG */
 .laptop-chassis {
   position: relative;
-  width: min(60vw, 1080px);
+  width: min(60cqw, 1080px);
   filter:
     drop-shadow(0 0  85px rgba(120, 100, 255, 0.68))
     drop-shadow(0 0 204px rgba(100,  80, 220, 0.27));
@@ -1187,10 +1188,10 @@ em  { font-style: normal; }
 /* Text block — same positioning as TV & Film */
 .branded-text {
   position: absolute;
-  left: 18vw;
+  left: 18cqw;
   top: 50%;
   transform: translateY(-50%);
-  width: min(340px, 26vw);
+  width: min(340px, 26cqw);
   z-index: 2;
 }
 
@@ -1209,7 +1210,7 @@ em  { font-style: normal; }
    Drop reel.mp4 into <source> when ready.
    ============================================================ */
 .tvfilm-scene {
-  padding: 0 6vw;
+  padding: 0 6cqw;
   align-items: center;
   justify-content: flex-end;
 }
@@ -1217,7 +1218,7 @@ em  { font-style: normal; }
 /* Floating wrapper — right half of the scene, gentle vertical drift */
 .tvfilm-float {
   position: absolute;
-  right: 3vw;
+  right: 3cqw;
   top: 50%;
   animation: tv-float 7s ease-in-out infinite;
 }
@@ -1231,7 +1232,7 @@ em  { font-style: normal; }
 /* Chassis is now just a sized, positioned wrapper around the PNG */
 .tv-chassis {
   position: relative;
-  width: min(58vw, 1080px);
+  width: min(58cqw, 1080px);
   filter:
     drop-shadow(0 0  85px rgba(120, 100, 255, 0.77))
     drop-shadow(0 0 204px rgba(100,  80, 220, 0.31));
@@ -1283,15 +1284,15 @@ em  { font-style: normal; }
 /* Text block — cleared right of the nav logo watermark */
 .tvfilm-text {
   position: absolute;
-  left: 18vw;
+  left: 18cqw;
   top: 50%;
   transform: translateY(-50%);
-  width: min(340px, 26vw);
+  width: min(340px, 26cqw);
   z-index: 2;
 }
 
 .tvfilm-text .headline-lg {
-  font-size: clamp(1.8rem, 4.2vw, 4.5rem);
+  font-size: clamp(1.8rem, 4.2cqw, 4.5rem);
 }
 
 /* Signal label inside the text block — flows above the headline,
@@ -1333,7 +1334,7 @@ em  { font-style: normal; }
   display: block;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.4rem, 3.5vw, 3.2rem);
+  font-size: clamp(1.4rem, 3.5cqw, 3.2rem);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   background: var(--holo);
@@ -1354,7 +1355,7 @@ em  { font-style: normal; }
 .contact-socials {
   margin-top: 3.5vh;
   display: flex;
-  gap: 2.5vw;
+  gap: 2.5cqw;
 }
 
 .contact-social-link {
@@ -1380,7 +1381,7 @@ em  { font-style: normal; }
 .contact-social-handle {
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+  font-size: clamp(0.85rem, 1.4cqw, 1.1rem);
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.8);
 }
@@ -1390,7 +1391,7 @@ em  { font-style: normal; }
    Tames the large headline and rebalances two-column layouts
    at intermediate widths without touching the desktop layout.
    ============================================================ */
-@media (min-width: 769px) and (max-width: 1150px) {
+@media (min-width: 769px) and (max-width: 899px) {
   .headline-xl { font-size: clamp(2.2rem, 5.5vw, 5rem); }
 
   /* #whats — fix video width so it stays prominent; text column narrows + wraps taller */
